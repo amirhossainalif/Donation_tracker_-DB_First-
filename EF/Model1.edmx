@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Donation_TrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Campaign">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Post" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Comments" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Emp_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Donor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DOB" Type="date" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Donor_Details">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Amount" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Donor_Id" Type="int" Nullable="false" />
+          <Property Name="Emp_Id" Type="int" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="U_Id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Campaign_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Campaign" Type="Self.Campaign" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Campaign">
+              <PropertyRef Name="Emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Donor_Details_Donor">
+          <End Role="Donor" Type="Self.Donor" Multiplicity="1" />
+          <End Role="Donor_Details" Type="Self.Donor_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Donor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Donor_Details">
+              <PropertyRef Name="Donor_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Donor_Details_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Donor_Details" Type="Self.Donor_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Donor_Details">
+              <PropertyRef Name="Emp_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Login_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Login" Type="Self.Login" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Login">
+              <PropertyRef Name="U_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Donation_TrackerModelStoreContainer">
+          <EntitySet Name="Campaign" EntityType="Self.Campaign" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Donor" EntityType="Self.Donor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Donor_Details" EntityType="Self.Donor_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Campaign_Employee" Association="Self.FK_Campaign_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Campaign" EntitySet="Campaign" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Donor_Details_Donor" Association="Self.FK_Donor_Details_Donor">
+            <End Role="Donor" EntitySet="Donor" />
+            <End Role="Donor_Details" EntitySet="Donor_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Donor_Details_Employee" Association="Self.FK_Donor_Details_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Donor_Details" EntitySet="Donor_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Login_Employee" Association="Self.FK_Login_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Login" EntitySet="Login" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Donation_TrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Campaign">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Post" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Comments" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Emp_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Campaign_Employee" FromRole="Campaign" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Donor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DOB" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Donor_Details" Relationship="Self.FK_Donor_Details_Donor" FromRole="Donor" ToRole="Donor_Details" />
+        </EntityType>
+        <EntityType Name="Donor_Details">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Amount" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Donor_Id" Type="Int32" Nullable="false" />
+          <Property Name="Emp_Id" Type="Int32" />
+          <NavigationProperty Name="Donor" Relationship="Self.FK_Donor_Details_Donor" FromRole="Donor_Details" ToRole="Donor" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Donor_Details_Employee" FromRole="Donor_Details" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Campaigns" Relationship="Self.FK_Campaign_Employee" FromRole="Employee" ToRole="Campaign" />
+          <NavigationProperty Name="Donor_Details" Relationship="Self.FK_Donor_Details_Employee" FromRole="Employee" ToRole="Donor_Details" />
+          <NavigationProperty Name="Logins" Relationship="Self.FK_Login_Employee" FromRole="Employee" ToRole="Login" />
+        </EntityType>
+        <EntityType Name="Login">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="U_Id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Login_Employee" FromRole="Login" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Campaign_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Campaign" Type="Self.Campaign" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Campaign">
+              <PropertyRef Name="Emp_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Donor_Details_Donor">
+          <End Role="Donor" Type="Self.Donor" Multiplicity="1" />
+          <End Role="Donor_Details" Type="Self.Donor_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Donor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Donor_Details">
+              <PropertyRef Name="Donor_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Donor_Details_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Donor_Details" Type="Self.Donor_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Donor_Details">
+              <PropertyRef Name="Emp_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Login_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Login" Type="Self.Login" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Login">
+              <PropertyRef Name="U_Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Donation_TrackerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Campaigns" EntityType="Self.Campaign" />
+          <EntitySet Name="Donors" EntityType="Self.Donor" />
+          <EntitySet Name="Donor_Details" EntityType="Self.Donor_Details" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="Logins" EntityType="Self.Login" />
+          <AssociationSet Name="FK_Campaign_Employee" Association="Self.FK_Campaign_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Campaign" EntitySet="Campaigns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Donor_Details_Donor" Association="Self.FK_Donor_Details_Donor">
+            <End Role="Donor" EntitySet="Donors" />
+            <End Role="Donor_Details" EntitySet="Donor_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Donor_Details_Employee" Association="Self.FK_Donor_Details_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Donor_Details" EntitySet="Donor_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Login_Employee" Association="Self.FK_Login_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Login" EntitySet="Logins" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Donation_TrackerModelStoreContainer" CdmEntityContainer="Donation_TrackerEntities">
+          <EntitySetMapping Name="Campaigns">
+            <EntityTypeMapping TypeName="Donation_TrackerModel.Campaign">
+              <MappingFragment StoreEntitySet="Campaign">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Post" ColumnName="Post" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Emp_id" ColumnName="Emp_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Donors">
+            <EntityTypeMapping TypeName="Donation_TrackerModel.Donor">
+              <MappingFragment StoreEntitySet="Donor">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Donor_Details">
+            <EntityTypeMapping TypeName="Donation_TrackerModel.Donor_Details">
+              <MappingFragment StoreEntitySet="Donor_Details">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Donor_Id" ColumnName="Donor_Id" />
+                <ScalarProperty Name="Emp_Id" ColumnName="Emp_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="Donation_TrackerModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logins">
+            <EntityTypeMapping TypeName="Donation_TrackerModel.Login">
+              <MappingFragment StoreEntitySet="Login">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="U_Id" ColumnName="U_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
